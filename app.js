@@ -13,14 +13,14 @@ const index = require('./server/routes/index');
 const app = express();  // Create the express app
 
 // View engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+//app.set('views', path.join(__dirname, 'views'));
+//app.set('view engine', 'pug');
 
-// uncomment after placing your favicon in /src
-//app.use(favicon(path.join(__dirname, 'src', 'favicon.ico')));
+// Set up favicon
+app.use(favicon(path.join(__dirname, 'src/img', 'favicon.png')));
 
 // Set up the port
-app.set('port', process.env.PORT || 63343);
+app.set('port', process.env.PORT || 63400);
 
 /** ********** LOAD MIDDLEWARES ********** **/
 

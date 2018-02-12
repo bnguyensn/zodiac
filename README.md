@@ -1,54 +1,15 @@
-# bnguyensn.com
+# zodiac
 
-### Underlying Technologies
+### Purpose
 
-* Node.js
-* Express
-* Webpack
-* React
+Find out your zodiac animal based on your birthday
 
-### Boilerplate parts
+### The Chinese Calendar
 
-###### Essential generic files for any new projects that employ the same technologies
+The traditional Chinese calendar is a lunisolar calendar: each month starts on a new moon, and the months are numbered according to solar events, specifically, to guarantee that month 11 always contains the winter solstice.
 
-First, you should have these global packages:
+In order to accomplish this, leap months are inserted in certain years. Leap months are numbered the same as the month they follow. The decision of which month is a leap month depends on the relative movements of the sun and moon.
 
-```
-yarn
-```
+* **Rule 1** - Calculations are based on the meridian 120deg East
 
-Then the files you want are:
-
-```
-.babelrc
-.env  /* NOTE: this file should NOT be committed to version control i.e. put it in your .gitignore. See the 'dotenv' package for details.
-.gitignore
-package.json
-postcss.config.js
-README.md
-webpack.common.js
-webpack.dev.js
-webpack.prod.js
-```
-
-Having the `package.json`, do a `yarn install` :coffee:.
-
-### Specific parts
-
-The items below vary heavily between projects. But the most important ones are:
-
-```
-server/
-    db/
-    routes/
-    views/
-src/
-    css/
-    html/
-    img/
-    js/
-    json/
-    index.html
-    index.js
-app.js
-```
+* **Rule 2** - The day on which the new Moon occurs is the first day of the month
