@@ -32,6 +32,62 @@ function normalizeDeg(deg) {
 }
 
 /**
+ * Convert a given radian to degrees
+ * @param {Number} rad A radian to be converted
+ * @return The converted radian in degrees
+ * */
+function radToDeg(rad) {
+    return rad * (180 / Math.PI)
+}
+
+/**
+ * Convert a given degree to radians
+ * @param {Number} deg A degree to be converted
+ * @return The converted degree in radians
+ * */
+function degToRad(deg) {
+    return deg / (180 / Math.PI)
+}
+
+/**
+ * Return the Planetary Arguments adjustment for a given n and t
+ * @param {Number} n This Number is found in the getNthNM() function
+ * @param {Number} t This Number is found in the getNthNM() function
+ * @return {Number} The Planetary Arguments adjustment */
+function plnArgs(n, t) {
+    // The 14 As Planetary arguments
+    const arr1 = [
+        299.77 + 0.107408 * n - 0.009173 * (t ** 2),
+        251.88 + 0.016321 * n,
+        251.83 + 26.651886 * n,
+        349.42 + 36.412478 * n,
+        84.66 + 18.206239 * n,
+        141.74 + 53.303771 * n,
+        207.14 + 2.453732 * n,
+        154.84 + 7.30686 * n,
+        34.52 + 27.261239 * n,
+        207.19 + 0.121824 * n,
+        291.34 + 1.844379 * n,
+        161.72 + 24.198154 * n,
+        239.56 + 25.513099 * n,
+        331.55 + 3.592518 * n
+    ];
+
+    // Take a sin on the 14 As
+    const arr2 = arr1.map(item1 => Math.sin(degToRad(item1)));
+
+    // 14 additional adjustments
+    const arr3 = [325, 165, 164, 126, 110, 62, 56, 47, 42, 40, 37, 35, 23];
+
+    // Planetary Arguments array
+    const PA_arr = arr2.map((item2, index2) => item2 * arr3[index2]);
+
+    // Sum up the Planetary Arguments array to get the Planetary Arguments adjustment
+    // Don't forget the x 10^-6
+    return (PA_arr.reduce((n1, n2) => n1 + n2, 0) * (10 ** -6))
+}
+
+/**
  * Return the nth New Moon since the New Moon epoch UTC date (06/01/2000 18:14)
  * @param {Number} n A number representing the nth New Moon since the New Moon epoch UTC date
  * @return {Date} New Moon date corresponding to the given n
@@ -63,7 +119,10 @@ function getNthNM(n) {
     const O_norm = normalizeDeg(O);
 
     // New Moon corrections (days)
-    
+
+    // Planetary arguments adjustment (deg)
+    const PA_norm = normalizeDeg()
+
 }
 
 
