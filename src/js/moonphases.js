@@ -1,5 +1,7 @@
 'use strict';
 
+/* ********** CONSTANTS ********** */
+
 const MS_IN_DAY = 86400000;
 
 const MEAN_LUNATION_DAYS = 29.530588853;  // Mean value of a moon synodic month
@@ -19,16 +21,139 @@ const CNY_LE_DAY = 21;
 const CNY_MEDIAN_MONTH = 1;
 const CNY_MEDIAN_DAY = 16;
 
-/**
- * Normalise a given degree
- * @param {Number} deg The degree to be normalised
- * @return The normalised degree
- * */
+/* ********** HELPER FUNCTIONS ********** */
+
 function normalizeDeg(deg) {
     if (deg < 0) {
         return 360. + (deg % 360)
     }
     return deg % 360
+}
+
+function radToDeg(rad) {
+    return rad * (180 / Math.PI)
+}
+
+function degToRad(deg) {
+    return deg / (180 / Math.PI)
+}
+
+/* ********** MOON PHASES FUNCTIONS ********** */
+
+/**
+ * Return the Planetary Arguments adjustment for a given n and t
+ * @param {Number} n This Number is found in the getNthNM() function
+ * @param {Number} t This Number is found in the getNthNM() function
+ * @return {Number} The Planetary Arguments adjustment */
+function getPlnArgsAdj(n, t) {
+    // The 14 As Planetary arguments
+    const arr1 = [
+        299.77 + 0.107408 * n - 0.009173 * (t ** 2),
+        251.88 + 0.016321 * n,
+        251.83 + 26.651886 * n,
+        349.42 + 36.412478 * n,
+        84.66 + 18.206239 * n,
+        141.74 + 53.303771 * n,
+        207.14 + 2.453732 * n,
+        154.84 + 7.30686 * n,
+        34.52 + 27.261239 * n,
+        207.19 + 0.121824 * n,
+        291.34 + 1.844379 * n,
+        161.72 + 24.198154 * n,
+        239.56 + 25.513099 * n,
+        331.55 + 3.592518 * n
+    ];
+
+    // Take a sin on the 14 As
+    const arr2 = arr1.map(item1 => Math.sin(degToRad(item1)));
+
+    // 14 additional adjustments
+    const arr3 = [325, 165, 164, 126, 110, 62, 60, 56, 47, 42, 40, 37, 35, 23];
+
+    // Planetary Arguments array
+    const PA_arr = arr2.map((item2, index2) => item2 * arr3[index2]);
+
+    // Sum up the Planetary Arguments array to get the Planetary Arguments adjustment
+    // Don't forget the x 10^-6 because we performed a x 10^6 for all arr3 items
+    return (PA_arr.reduce((n1, n2) => n1 + n2, 0) * (10 ** -6))
+}
+
+/**
+ * Return the New Moon Corrections adjustment for a given E, S, M, F, O
+ * @param {Number} E This Number is found in the getNthNM() function
+ * @param {Number} S This Number is found in the getNthNM() function
+ * @param {Number} M This Number is found in the getNthNM() function
+ * @param {Number} F This Number is found in the getNthNM() function
+ * @param {Number} O This Number is found in the getNthNM() function
+ * @return {Number} The New Moon Corrections adjustment
+ * */
+function getNMCorrsAdj(E, S, M, F, O) {
+    // 25 New Moon corrections 1
+    const arr1 = [
+        -0.4072,
+        0.17241 * E,
+        0.01608,
+        0.01039,
+        0.00739 * E,
+        -0.00514 * E,
+        0.00208 * (E ** 2),
+        -0.00111,
+        -0.00057,
+        0.00056 * E,
+        -0.00042,
+        0.00042 * E,
+        0.00038 * E,
+        -0.00024 * E,
+        -0.00017,
+        -0.00007,
+        0.00004,
+        0.00004,
+        0.00003,
+        0.00003,
+        -0.00003,
+        0.00003,
+        -0.00002,
+        -0.00002,
+        0.00002
+    ];
+
+    // 25 New Moon corrections 2
+    const arr2 = [
+        M,
+        S,
+        2 * M,
+        2 * F,
+        M - S,
+        M + S,
+        2 * S,
+        M - 2 * F,
+        M + 2 * F,
+        2 * M + S,
+        3 * M,
+        S + 2 * F,
+        S - 2 * F,
+        2 * M - S,
+        O,
+        M + 2 * S,
+        2 * M - 2 * F,
+        3 * S,
+        M + S - 2 * F,
+        2 * M + 2 * F,
+        M + S + 2 * F,
+        M - S + 2 * F,
+        M - S - 2 * F,
+        3 * M + S,
+        4 * M
+    ];
+
+    // Take a sin on the 25 New Moon corrections 2
+    const arr3 = arr2.map(item2 => Math.sin(degToRad(item2)));
+
+    // New Moon Corrections array
+    const NMCorrs_arr = arr1.map((item1, index1) => item1 * arr3[index1]);
+
+    // Sum up the New Moon Corrections array to get the New Moon Corrections adjustment
+    return NMCorrs_arr.reduce((n1, n2) => n1 + n2, 0)
 }
 
 /**
@@ -38,32 +163,41 @@ function normalizeDeg(deg) {
  * */
 function getNthNM(n) {
     // Approximate Julian centuries since the 2000 epoch
-    const t = n / 1236.85;
+    const T = n / 1236.85;
 
-    // Time since the 2000 epoch (days)
-    const n_extra_days = MEAN_LUNATION_DAYS + 0.00013377 * (t ** 2) + 0.000000150 * (t ** 3) + 0.00000000073 * (t ** 4);
+    // New Moon phase time
+    const JDE = 2451550.09765 + 29.530588853 * n
+                + 0.00013377 * (T ** 2) + 0.000000150 * (T ** 3) + 0.00000000073 * (T ** 4);
 
     // E
-    const E = 1 - 0.002516 * t - 0.0000074 * (t ** 2);
+    const E = 1 - 0.002516 * T - 0.0000074 * (T ** 2);
 
     // The Sun's mean anomaly (deg)
-    const S = 2.5534 + 29.10535669 * n - 0.0000218 * (t ** 2) - 0.00000011 * (t ** 3);
+    const S = 2.5534 + 29.10535669 * n - 0.0000218 * (T ** 2) - 0.00000011 * (T ** 3);
     const S_norm = normalizeDeg(S);
 
     // The Moon's mean anomaly (deg)
-    const M = 201.5643 + 385.81693528 * n + 0.0107438 * (t ** 2) + 0.00001239 * (t ** 3) - 0.000000058 * (t ** 4);
+    const M = 201.5643 + 385.81693528 * n + 0.0107438 * (T ** 2) + 0.00001239 * (T ** 3) - 0.000000058 * (T ** 4);
     const M_norm = normalizeDeg(M);
 
     // The Moon's argument of latitude (deg)
-    const F = 160.7108 + 390.67050274 * n - 0.0016341 * (t ** 2) - 0.00000227 * (t ** 3) + 0.000000011 * (t ** 4);
+    const F = 160.7108 + 390.67050274 * n - 0.0016341 * (T ** 2) - 0.00000227 * (T ** 3) + 0.000000011 * (T ** 4);
     const F_norm = normalizeDeg(F);
 
     // Longitude of the ascending node of the lunar orbit (deg)
-    const O = 124.7746 - 1.5637558 * n + 0.0020691 * (t ** 2) + 0.00000215 * (t ** 3);
+    const O = 124.7746 - 1.5637558 * n + 0.0020691 * (T ** 2) + 0.00000215 * (T ** 3);
     const O_norm = normalizeDeg(O);
 
     // New Moon corrections (days)
-    
+    const NMCadj = getNMCorrsAdj(E, S_norm, M_norm, F_norm, O_norm);
+
+    // Planetary arguments adjustment
+    const PAadj = getPlnArgsAdj(n, T);
+
+    // JDE with adjustments
+    const JDE_adj = JDE + NMCadj + PAadj;
+
+    return JDE_adj
 }
 
 
@@ -132,10 +266,11 @@ function test() {
     console.log(`CNY in ${y} = ${a.toString()} (UTC)\n${china_a.toString()} (China UTC + 8)`);
 }
 
-test();
+function test2() {
+    console.log(getPlnArgsAdj(-283, -0.22881));
+}
 
-/*
 module.exports = {
-    getNMSandwichDates: getNMSandwichDates
+    getPlnArgsAdj: getPlnArgsAdj,
+    getNMCorrsAdj: getNMCorrsAdj
 };
-*/
