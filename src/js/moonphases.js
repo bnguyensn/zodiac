@@ -3,6 +3,9 @@
 /* ********** CONSTANTS ********** */
 
 const MS_IN_DAY = 86400000;
+const HR_IN_DAY = 24;
+const MIN_IN_HOUR = 60;
+const SEC_IN_MIN = 60;
 
 const MEAN_LUNATION_DAYS = 29.530588853;  // Mean value of a moon synodic month
 const MEAN_LUNATION_MS = MEAN_LUNATION_DAYS * MS_IN_DAY;
@@ -38,17 +41,65 @@ function degToRad(deg) {
     return deg / (180 / Math.PI)
 }
 
+function getDecimals(n) {
+    return n - Math.trunc(n)
+}
+
+function jdeToUTC(jde) {
+    // JDE = Julian Ephemeris Day
+
+    if (jde < 0) {
+        // This function is only valid for positive JDEs
+        return NaN
+    }
+
+    const jde_adj = jde + 0.5,
+          Z = Math.trunc(jde_adj),
+          F = jde_adj - Z;
+
+    let A, alpha;
+
+    if (Z < 2299161) {
+        A = Z;
+    } else {
+        alpha = Math.trunc((Z - 1867216.25) / 36524.25);
+        A = Z + 1 + alpha - Math.trunc(alpha / 4);
+    }
+
+    const B = A + 1524,
+          C = Math.trunc((B - 122.1) / 365.25),
+          D = Math.trunc(365.25 * C),
+          E = Math.trunc((B - D) / 30.6001);
+
+    let UTCy, UTCm, UTCd, UTChr, UTCmin, UTCsec;
+
+    // UTC day of the month (with decimals), hours, minutes, and seconds
+    UTCd = B - D - Math.trunc(30.6001 * E) + F;
+    UTChr = HR_IN_DAY * getDecimals(UTCd);
+    UTCmin = MIN_IN_HOUR * getDecimals(UTChr);
+    UTCsec = SEC_IN_MIN * getDecimals(UTCmin);
+
+    // UTC month
+    E < 14 ? UTCm = E - 1 : UTCm = E - 13;
+
+    // UTC year
+    UTCm > 2 ? UTCy = C - 4716 : UTCy = C - 4715;
+
+    // Remember that month is 0-indexed
+    return new Date(UTCy, UTCm - 1, UTCd, UTChr, UTCmin, UTCsec).toString();
+}
+
 /* ********** MOON PHASES FUNCTIONS ********** */
 
 /**
- * Return the Planetary Arguments adjustment for a given n and t
+ * Return the Planetary Arguments adjustment for a given n and T
  * @param {Number} n This Number is found in the getNthNM() function
- * @param {Number} t This Number is found in the getNthNM() function
+ * @param {Number} T This Number is found in the getNthNM() function
  * @return {Number} The Planetary Arguments adjustment */
-function getPlnArgsAdj(n, t) {
+function getPlnArgsAdj(n, T) {
     // The 14 As Planetary arguments
     const arr1 = [
-        299.77 + 0.107408 * n - 0.009173 * (t ** 2),
+        299.77 + 0.107408 * n - 0.009173 * (T ** 2),
         251.88 + 0.016321 * n,
         251.83 + 26.651886 * n,
         349.42 + 36.412478 * n,
@@ -165,7 +216,7 @@ function getNthNM(n) {
     // Approximate Julian centuries since the 2000 epoch
     const T = n / 1236.85;
 
-    // New Moon phase time
+    // New Moon time
     const JDE = 2451550.09765 + 29.530588853 * n
                 + 0.00013377 * (T ** 2) + 0.000000150 * (T ** 3) + 0.00000000073 * (T ** 4);
 
@@ -197,7 +248,7 @@ function getNthNM(n) {
     // JDE with adjustments
     const JDE_adj = JDE + NMCadj + PAadj;
 
-    return JDE_adj
+    return jdeToUTC(JDE_adj)
 }
 
 
@@ -271,6 +322,8 @@ function test2() {
 }
 
 module.exports = {
+    jdeToUTC: jdeToUTC,
     getPlnArgsAdj: getPlnArgsAdj,
-    getNMCorrsAdj: getNMCorrsAdj
+    getNMCorrsAdj: getNMCorrsAdj,
+    getNthNM: getNthNM
 };
