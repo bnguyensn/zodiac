@@ -28,8 +28,6 @@ const imgLoaderSizeLimit = 1024 * 10;  // 10kb
 module.exports = {
     entry: {
         index: './src/index.js',
-        login: './src/login.js',
-        chat: './src/chat.js',
         vendor: vendorPackages
     },
 

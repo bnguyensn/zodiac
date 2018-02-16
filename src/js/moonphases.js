@@ -13,17 +13,6 @@ const MEAN_LUNATION_MS = MEAN_LUNATION_DAYS * MS_IN_DAY;
 const NEW_MOON_EPOCH_DATE = new Date(2000, 0, 6, 18, 14);  // There was a New Moon starting on this Date (note that month 0 = Jan)
 const NEW_MOON_EPOCH_MS = NEW_MOON_EPOCH_DATE.getTime();
 
-// As a rule of thumb, Chinese New Year falls between Jan 21 and Feb 21
-// We define here these two extremes and median date between them to support our functions
-const CNY_HE_MONTH = 1;  // Note that month 1 = Feb
-const CNY_HE_DAY = 21;
-
-const CNY_LE_MONTH = 0;
-const CNY_LE_DAY = 21;
-
-const CNY_MEDIAN_MONTH = 1;
-const CNY_MEDIAN_DAY = 16;
-
 /* ********** HELPER FUNCTIONS ********** */
 
 function normalizeDeg(deg) {
@@ -45,9 +34,10 @@ function getDecimals(n) {
     return n - Math.trunc(n)
 }
 
+/**
+ * Convert a given Julian Ephemeris Day to UTC
+ * */
 function jdeToUTC(jde) {
-    // JDE = Julian Ephemeris Day
-
     if (jde < 0) {
         // This function is only valid for positive JDEs
         return NaN
@@ -86,16 +76,41 @@ function jdeToUTC(jde) {
     UTCm > 2 ? UTCy = C - 4716 : UTCy = C - 4715;
 
     // Remember that month is 0-indexed
-    return new Date(UTCy, UTCm - 1, UTCd, UTChr, UTCmin, UTCsec).toString();
+    return new Date(UTCy, UTCm - 1, UTCd, UTChr, UTCmin, UTCsec);
+}
+
+/**
+ * Convert a given date to year with decimal
+ */
+function dateToYrDcm(date) {
+    const y = date.getFullYear();
+
+    const d_start = new Date(y, 0, 1).getTime(),
+          d_end = new Date(y + 1, 0, 1).getTime();
+
+    const d_total = d_end - d_start;
+    const d_elapsed = date.getTime() - d_start;
+
+    const y_dcm = d_elapsed / d_total;
+
+    return y + y_dcm;
 }
 
 /* ********** MOON PHASES FUNCTIONS ********** */
 
 /**
- * Return the Planetary Arguments adjustment for a given n and T
- * @param {Number} n This Number is found in the getNthNM() function
- * @param {Number} T This Number is found in the getNthNM() function
- * @return {Number} The Planetary Arguments adjustment */
+ * From a given point in time (year with decimal), return its 2 sandwiching New Moon index relative to the JDE epoch
+ * This is a helper for the getNthNM() function
+ * */
+function yrToSandwichNs(year) {
+    const n = (year - 2000) * 12.3685;
+
+    return [Math.floor(n), Math.ceil(n)]
+}
+
+/**
+ * Return the Planetary Arguments adjustment for a given n and T. These parameters come from the getNthNM() function
+ * */
 function getPlnArgsAdj(n, T) {
     // The 14 As Planetary arguments
     const arr1 = [
@@ -130,13 +145,8 @@ function getPlnArgsAdj(n, T) {
 }
 
 /**
- * Return the New Moon Corrections adjustment for a given E, S, M, F, O
- * @param {Number} E This Number is found in the getNthNM() function
- * @param {Number} S This Number is found in the getNthNM() function
- * @param {Number} M This Number is found in the getNthNM() function
- * @param {Number} F This Number is found in the getNthNM() function
- * @param {Number} O This Number is found in the getNthNM() function
- * @return {Number} The New Moon Corrections adjustment
+ * Return the New Moon Corrections adjustment for a given E, S, M, F, and O
+ * These parameters come from the getNthNM() function
  * */
 function getNMCorrsAdj(E, S, M, F, O) {
     // 25 New Moon corrections 1
@@ -208,8 +218,8 @@ function getNMCorrsAdj(E, S, M, F, O) {
 }
 
 /**
- * Return the nth New Moon since the New Moon epoch UTC date (06/01/2000 18:14)
- * @param {Number} n A number representing the nth New Moon since the New Moon epoch UTC date
+ * Return the nth New Moon since the epoch JDE date
+ * @param {Number} n A number representing the nth New Moon since the epoch JDE date
  * @return {Date} New Moon date corresponding to the given n
  * */
 function getNthNM(n) {
@@ -251,79 +261,19 @@ function getNthNM(n) {
     return jdeToUTC(JDE_adj)
 }
 
+/* ********** EXPORT FUNCTIONS ********** */
 
 /**
  * Return the approximate New Moon dates sandwiching a given UTC date
  * @param {Date} date A given UTC date
- * @return {Array} New Moon dates sandwiching the given UTC date. If the given UTC date is a New Moon Date, NM_date 2 === undefined.
+ * @return {Array} New Moon dates sandwiching the given UTC date
  * */
 function getNMSandwichDates(date) {
-    const date_ms = date.getTime();
-    const date_norm = date.setHours(0, 0, 0, 0);  // Normalise to 00:00:00:0000
+    const ns = yrToSandwichNs(dateToYrDcm(date));
 
-    // Find out the ms difference between the New Moon epoch and our given date
-    const date_elapsed_ms = date_ms - NEW_MOON_EPOCH_MS;
-
-    // Find the two New Moon dates sandwiching our given date
-    const low_end_LP = Math.floor(date_elapsed_ms / MEAN_LUNATION_MS);
-    const low_end_NMDate = new Date(NEW_MOON_EPOCH_MS + low_end_LP * MEAN_LUNATION_MS);
-    const low_end_NMDate_norm = new Date(low_end_NMDate);
-    low_end_NMDate_norm.setHours(0, 0, 0, 0);
-
-    let high_end_LP;
-    let high_end_NMDate;
-    let high_end_NMDate_norm;
-
-    if (date_norm !== low_end_NMDate_norm) {
-        high_end_LP = low_end_LP + 1;
-        high_end_NMDate = new Date(NEW_MOON_EPOCH_MS + high_end_LP * MEAN_LUNATION_MS);
-        high_end_NMDate_norm = new Date(high_end_NMDate);
-        high_end_NMDate_norm.setHours(0, 0, 0, 0);
-    }
-    
-    return [low_end_NMDate, high_end_NMDate];
-}
-
-/**
- * Return the approximate Chinese New Year date from a given UTC year
- * @param {Number} year A given UTC year
- * @return {Date} Approximate Chinese New Year UTC date for the given UTC year
- * */
-function getChineseNewYear(year) {
-    const CNY_median_date = new Date(year, CNY_MEDIAN_MONTH, CNY_MEDIAN_DAY);
-
-    const CNY_sandwich_dates = getNMSandwichDates(CNY_median_date);
-
-    if (!CNY_sandwich_dates[1]) {
-        // Our median date is actually a New Moon date i.e. it's a Chinese New Year Date!
-        return CNY_median_date
-    } else {
-        // As a rule of thumb, return the "later" date, unless it's later than Feb 21, then return the "earlier" date
-        const CNY_he_date = new Date(year, CNY_HE_MONTH, CNY_HE_DAY);
-        if (CNY_sandwich_dates[1] > CNY_he_date) {
-            return CNY_sandwich_dates[0]
-        }
-        return CNY_sandwich_dates[1]
-    }
-}
-
-function test() {
-    const y = 2038
-
-    const a = getChineseNewYear(y);
-    const china_a = new Date(a);
-    china_a.setHours(a.getHours() + 8);
-
-    console.log(`CNY in ${y} = ${a.toString()} (UTC)\n${china_a.toString()} (China UTC + 8)`);
-}
-
-function test2() {
-    console.log(getPlnArgsAdj(-283, -0.22881));
+    return [getNthNM(ns[0]), getNthNM(ns[1])]
 }
 
 module.exports = {
-    jdeToUTC: jdeToUTC,
-    getPlnArgsAdj: getPlnArgsAdj,
-    getNMCorrsAdj: getNMCorrsAdj,
-    getNthNM: getNthNM
+    getNMSandwichDates: getNMSandwichDates
 };
