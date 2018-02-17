@@ -9,11 +9,25 @@ import * as moonphases from './moonphases';
 const CNY_HE_MONTH = 1;  // Note that month 1 = Feb
 const CNY_HE_DAY = 21;
 
-const CNY_LE_MONTH = 0;
-const CNY_LE_DAY = 21;
-
 const CNY_MEDIAN_MONTH = 1;
 const CNY_MEDIAN_DAY = 16;
+
+const zodiacs = [
+    'Mouse',
+    'Ox',
+    'Tiger',
+    'Rabbit',
+    'Dragon',
+    'Snake',
+    'Horse',
+    'Goat',
+    'Monkey',
+    'Chicken',
+    'Dog',
+    'Pig'
+];
+
+const zodiacY = 1996;
 
 /* ********** FUNCTIONS ********** */
 
@@ -27,7 +41,8 @@ function getCNY(year) {
 
     const CNY_sandwich_dates = moonphases.getNMSandwichDates(CNY_median_date);
 
-    // As a rule of thumb, return the "later" date, unless it's later than Feb 21, then return the "earlier" date
+    // As a rule of thumb, return the "later" date
+    // Unless it's later than Feb 21, then return the earlier date
     const CNY_he_date = new Date(year, CNY_HE_MONTH, CNY_HE_DAY);
 
     if (CNY_sandwich_dates[1] > CNY_he_date) {
@@ -36,6 +51,37 @@ function getCNY(year) {
     return CNY_sandwich_dates[1]
 }
 
-module.exports = {
-    getCNY: getCNY
+/**
+ * Return the Chinese zodiac of a given UTC year
+ * Keep in mind that Chinese New Year (CNY) occurs around mid Jan - mid Feb and this check is not being performed here
+ * @param {Number} year A given UTC year
+ * @return {String} A Chinese zodiac
+ * */
+function getZodiacFromYear(year) {
+    const zodiac_i = year < zodiacY ? 12 + ((year - zodiacY) % 12) : (year - zodiacY) % 12;
+    return zodiacs[zodiac_i]
 }
+
+
+/**
+ * Return the Chinese zodiac related to a given UTC date
+ * We perform the CNY check mentioned in getZodiacFromYear() here
+ * @param {Date} date A given UTC date
+ * @return {String} A Chinese zodiac
+ * */
+function getZodiac(date) {
+    const UTCy = date.getFullYear();
+    const cny = getCNY(UTCy);
+
+    if (date >= cny) {
+        return getZodiacFromYear(UTCy)
+    } else {
+        return getZodiacFromYear(UTCy - 1)
+    }
+
+}
+
+module.exports = {
+    getCNY: getCNY,
+    getZodiac: getZodiac
+};

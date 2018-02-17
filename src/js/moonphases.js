@@ -2,16 +2,9 @@
 
 /* ********** CONSTANTS ********** */
 
-const MS_IN_DAY = 86400000;
 const HR_IN_DAY = 24;
 const MIN_IN_HOUR = 60;
 const SEC_IN_MIN = 60;
-
-const MEAN_LUNATION_DAYS = 29.530588853;  // Mean value of a moon synodic month
-const MEAN_LUNATION_MS = MEAN_LUNATION_DAYS * MS_IN_DAY;
-
-const NEW_MOON_EPOCH_DATE = new Date(2000, 0, 6, 18, 14);  // There was a New Moon starting on this Date (note that month 0 = Jan)
-const NEW_MOON_EPOCH_MS = NEW_MOON_EPOCH_DATE.getTime();
 
 /* ********** HELPER FUNCTIONS ********** */
 
@@ -35,7 +28,7 @@ function getDecimals(n) {
 }
 
 /**
- * Convert a given Julian Ephemeris Day to UTC
+ * Convert a given Julian Ephemeris Day (JDE) to UTC
  * */
 function jdeToUTC(jde) {
     if (jde < 0) {
@@ -234,23 +227,19 @@ function getNthNM(n) {
     const E = 1 - 0.002516 * T - 0.0000074 * (T ** 2);
 
     // The Sun's mean anomaly (deg)
-    const S = 2.5534 + 29.10535669 * n - 0.0000218 * (T ** 2) - 0.00000011 * (T ** 3);
-    const S_norm = normalizeDeg(S);
+    const S = normalizeDeg(2.5534 + 29.10535669 * n - 0.0000218 * (T ** 2) - 0.00000011 * (T ** 3));
 
     // The Moon's mean anomaly (deg)
-    const M = 201.5643 + 385.81693528 * n + 0.0107438 * (T ** 2) + 0.00001239 * (T ** 3) - 0.000000058 * (T ** 4);
-    const M_norm = normalizeDeg(M);
+    const M = normalizeDeg(201.5643 + 385.81693528 * n + 0.0107438 * (T ** 2) + 0.00001239 * (T ** 3) - 0.000000058 * (T ** 4));
 
     // The Moon's argument of latitude (deg)
-    const F = 160.7108 + 390.67050274 * n - 0.0016341 * (T ** 2) - 0.00000227 * (T ** 3) + 0.000000011 * (T ** 4);
-    const F_norm = normalizeDeg(F);
+    const F = normalizeDeg(160.7108 + 390.67050274 * n - 0.0016341 * (T ** 2) - 0.00000227 * (T ** 3) + 0.000000011 * (T ** 4));
 
     // Longitude of the ascending node of the lunar orbit (deg)
-    const O = 124.7746 - 1.5637558 * n + 0.0020691 * (T ** 2) + 0.00000215 * (T ** 3);
-    const O_norm = normalizeDeg(O);
+    const O = normalizeDeg(124.7746 - 1.5637558 * n + 0.0020691 * (T ** 2) + 0.00000215 * (T ** 3));
 
     // New Moon corrections (days)
-    const NMCadj = getNMCorrsAdj(E, S_norm, M_norm, F_norm, O_norm);
+    const NMCadj = getNMCorrsAdj(E, S, M, F, O);
 
     // Planetary arguments adjustment
     const PAadj = getPlnArgsAdj(n, T);
