@@ -62,7 +62,6 @@ function getZodiacFromYear(year) {
     return zodiacs[zodiac_i]
 }
 
-
 /**
  * Return the Chinese zodiac related to a given UTC date
  * We perform the CNY check mentioned in getZodiacFromYear() here
