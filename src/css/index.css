@@ -20,6 +20,12 @@ h1 {
     font-size: 1.25em;
 }
 
+#root-canvas {
+    min-height: 100vh;
+
+    background-color: #F8BBD0;  /* Pink 100 */
+}
+
 /* ********** HELPERS ********** */
 
 .hidden { display: none; }
@@ -64,15 +70,17 @@ h1 {
 }
 
 /* Resize texts when window is resized */
-@media only screen and (max-width: 768px) and (min-width: 513px) {
+@media only screen and (max-width: 1920px) and (min-width: 1281px) {
     body {
-        font-size: 3.125vw;  /* 3.125% = 24px (body font size) / 768px (limit width) */
+        font-size: 1.25vw;  /* Formula = body font size e.g. 24px / max-width e.g. 768px */
     }
 }
 
 /* Texts won't go smaller than 16px */
-@media only screen and (max-width: 512px) {
+@media only screen and (max-width: 1280px) {
     body {
-        font-size: 16px;  /* 512px is the cut-off when our font stops shrinking. 512px = 16px / 3.125% */
+        font-size: 16px;  /* Formula = min font size e.g. 16px / % above e.g. 3.125% */
     }
 }
+
+/* 688px is when our title starts to wrap to 2 lines */

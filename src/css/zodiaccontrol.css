@@ -1,0 +1,49 @@
+#zodiac-control-canvas {
+    display: flex;
+    justify-content: center;
+}
+
+input {
+    font: inherit;
+
+    text-align: center;
+}
+
+.date-control {
+    margin: 0.5em;
+}
+
+.date-control#year {
+    width: 4em;
+}
+
+.date-control#month {
+    width: 2em;
+}
+
+.date-control#day {
+    width: 2em;
+}
+
+.date-control.good {
+
+}
+
+.date-control.flash-red {
+    animation-duration: .25s;
+    animation-name: flash-red;
+}
+
+@keyframes flash-red {
+    0% {
+        background-color: inherit;
+    }
+
+    50% {
+        background-color: #ffcdd2;  /* Red 100 */
+    }
+
+    100% {
+        background-color: inherit;
+    }
+}

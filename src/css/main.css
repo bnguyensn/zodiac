@@ -1,44 +1,24 @@
-input {
-    font: inherit;
+#main-canvas {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    max-width: 1920px;
+
+    padding: 10px;
+}
+
+#main-canvas > div {
+    width: 100%;  /* We do this to wrap the canvas' children on one line each */
+}
+
+#title {
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    font-size: 2em;
 
     text-align: center;
 }
 
-.date-control {
-    margin: 0.5em;
-}
-
-.date-control#year {
-    width: 4em;
-}
-
-.date-control#month {
-    width: 2em;
-}
-
-.date-control#day {
-    width: 2em;
-}
-
-.date-control.good {
-
-}
-
-.date-control.flash-red {
-    animation-duration: .25s;
-    animation-name: flash-red;
-}
-
-@keyframes flash-red {
-    0% {
-        background-color: inherit;
-    }
-
-    50% {
-        background-color: #ffcdd2;  /* Red 100 */
-    }
-
-    100% {
-        background-color: inherit;
-    }
-}
+/* ********** RESPONSIVE WEB DESIGN ********** */
