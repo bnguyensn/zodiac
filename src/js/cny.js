@@ -58,7 +58,7 @@ function getCNY(year) {
  * @return {String} A Chinese zodiac
  * */
 function getZodiacFromYear(year) {
-    const zodiac_i = year < zodiacY ? 11 + ((year - zodiacY) % 12) : (year - zodiacY) % 12;
+    const zodiac_i = year < zodiacY ? 11 + ((year + 1 - zodiacY) % 12) : (year - zodiacY) % 12;
     console.log(`zodiac_i = ${zodiac_i}`);
     return zodiacs[zodiac_i]
 }

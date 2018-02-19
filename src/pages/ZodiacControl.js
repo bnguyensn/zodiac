@@ -43,6 +43,10 @@ class ZodiacResult extends PureComponent {
         super(props);
     }
 
+    componentDidMount() {
+
+    }
+
     componentDidUpdate(prevProps, prevState, prevContext) {
         console.log('ZodiacResult did update!');
     }
@@ -56,6 +60,7 @@ class ZodiacResult extends PureComponent {
             <div id='zodiac-result'>
                 <span id='zodiac-result-text'>{`You are a ${this.props.zodiac.charAt(0).toUpperCase()}${this.props.zodiac.substr(1)}!`}</span>
                 <img id='zodiac-result-icon'
+                     className='spin'
                      src={`/img/${this.props.zodiac.toLowerCase()}.png`} alt={this.props.zodiac} />
                 <span id='zodiac-result-about'>See the calculation method <a href='about'>here</a></span>
             </div>

@@ -37,8 +37,7 @@
 }
 
 .date-control.flash-red {
-    animation-duration: .25s;
-    animation-name: flash-red;
+    animation: .25s flash-red;
 }
 
 @keyframes flash-red {
@@ -67,4 +66,18 @@
     /* Icon max res = 120x120 */
     width: 5em;
     height: 5em;
+}
+
+#zodiac-result-icon.spin {
+    animation: 1s cubic-bezier(0, .95, .5, .95) spin;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(1800deg);
+    }
 }
