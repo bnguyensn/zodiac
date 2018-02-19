@@ -58,7 +58,8 @@ function getCNY(year) {
  * @return {String} A Chinese zodiac
  * */
 function getZodiacFromYear(year) {
-    const zodiac_i = year < zodiacY ? 12 + ((year - zodiacY) % 12) : (year - zodiacY) % 12;
+    const zodiac_i = year < zodiacY ? 11 + ((year - zodiacY) % 12) : (year - zodiacY) % 12;
+    console.log(`zodiac_i = ${zodiac_i}`);
     return zodiacs[zodiac_i]
 }
 
@@ -66,18 +67,21 @@ function getZodiacFromYear(year) {
  * Return the Chinese zodiac related to a given UTC date
  * We perform the CNY check mentioned in getZodiacFromYear() here
  * @param {Date} date A given UTC date
- * @return {String} A Chinese zodiac
+ * @return {String} A Chinese zodiac, or '' if date is not a Date
  * */
 function getZodiac(date) {
-    const UTCy = date.getFullYear();
-    const cny = getCNY(UTCy);
+    if (date instanceof Date) {
+        const UTCy = date.getFullYear();
+        const cny = getCNY(UTCy);
 
-    if (date >= cny) {
-        return getZodiacFromYear(UTCy)
+        if (date >= cny) {
+            return getZodiacFromYear(UTCy)
+        } else {
+            return getZodiacFromYear(UTCy - 1)
+        }
     } else {
-        return getZodiacFromYear(UTCy - 1)
+        return ''
     }
-
 }
 
 module.exports = {

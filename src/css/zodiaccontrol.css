@@ -1,9 +1,20 @@
 #zodiac-control-canvas {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
-input {
+#zodiac-control-canvas > div {
+    width: 100%;
+}
+
+/** ********** INPUTS ********** **/
+
+#zodiac-control-inputs {
+    text-align: center;
+}
+
+#zodiac-control-inputs input {
     font: inherit;
 
     text-align: center;
@@ -25,10 +36,6 @@ input {
     width: 2em;
 }
 
-.date-control.good {
-
-}
-
 .date-control.flash-red {
     animation-duration: .25s;
     animation-name: flash-red;
@@ -46,4 +53,18 @@ input {
     100% {
         background-color: inherit;
     }
+}
+
+/** ********** RESULTS ********** **/
+
+#zodiac-result > span {
+    display: block;
+
+    text-align: center;
+}
+
+#zodiac-result-icon {
+    /* Icon max res = 120x120 */
+    width: 5em;
+    height: 5em;
 }
