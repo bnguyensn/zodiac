@@ -5,6 +5,12 @@ import * as cny from '../js/cny';
 import * as validation from '../js/validation';
 import '../css/zodiaccontrol.css';
 
+function addAnimationClass(target, animation_class) {
+    target.classList.remove(animation_class);
+    void target.offsetWidth;  // Trigger a document re-flow. This is needed for CSS animation resetting to work.
+    target.classList.add(animation_class);
+}
+
 class DateInput extends PureComponent {
     constructor(props) {
         super(props);
@@ -41,14 +47,26 @@ class DateInput extends PureComponent {
 class ZodiacResult extends PureComponent {
     constructor(props) {
         super(props);
+        this.handleAnimationEnd = this.handleAnimationEnd.bind(this);
     }
 
     componentDidMount() {
-
+        const element = document.getElementById('zodiac-result-icon');
+        if (element !== null) {
+            addAnimationClass(document.getElementById('zodiac-result-icon'), 'spin');
+        }
     }
 
     componentDidUpdate(prevProps, prevState, prevContext) {
         console.log('ZodiacResult did update!');
+        const element = document.getElementById('zodiac-result-icon');
+        if (element !== null) {
+            addAnimationClass(document.getElementById('zodiac-result-icon'), 'spin');
+        }
+    }
+
+    handleAnimationEnd(e) {
+        e.target.classList.remove(e.animationName);
     }
 
     render() {
@@ -61,7 +79,8 @@ class ZodiacResult extends PureComponent {
                 <span id='zodiac-result-text'>{`You are a ${this.props.zodiac.charAt(0).toUpperCase()}${this.props.zodiac.substr(1)}!`}</span>
                 <img id='zodiac-result-icon'
                      className='spin'
-                     src={`/img/${this.props.zodiac.toLowerCase()}.png`} alt={this.props.zodiac} />
+                     src={`/img/${this.props.zodiac.toLowerCase()}.png`} alt={this.props.zodiac}
+                     onAnimationEnd={this.handleAnimationEnd} />
                 <span id='zodiac-result-about'>See the calculation method <a href='about'>here</a></span>
             </div>
         )
@@ -86,9 +105,7 @@ class ZodiacControl extends Component {
     }
 
     flashInput(target, colour) {
-        target.classList.remove(colour);
-        void target.offsetWidth;  // Trigger a document re-flow. This is needed for CSS animation resetting to work.
-        target.classList.add(colour);
+        addAnimationClass(target, colour);
     }
 
     handleDateChange(e) {
