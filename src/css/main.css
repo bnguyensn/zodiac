@@ -9,16 +9,5 @@
 }
 
 #main-canvas > div {
-    width: 100%;  /* We do this to wrap the canvas' children on one line each */
+    width: 100%;
 }
-
-#title {
-    margin-top: 10px;
-    margin-bottom: 10px;
-
-    font-size: 2em;
-
-    text-align: center;
-}
-
-/* ********** RESPONSIVE WEB DESIGN ********** */

@@ -10,7 +10,7 @@ class About extends Component {
     render() {
         return (
             <div id='#about-canvas'>
-
+                There doesn't seem to be anything here.
             </div>
         )
     }
