@@ -3,6 +3,7 @@
 import React, {Component, PureComponent} from 'react';
 import * as cny from '../js/cny';
 import * as validation from '../js/validation';
+import * as zodiacimg from '../js/imgimp';
 import '../css/zodiaccontrol.css';
 
 function addAnimationClass(target, animation_class) {
@@ -69,6 +70,10 @@ class ZodiacResult extends PureComponent {
         e.target.classList.remove(e.animationName);
     }
 
+    handleClick(e) {
+        addAnimationClass(e.target, 'spin');
+    }
+
     render() {
         if (this.props.zodiac === '') {
             return null;
@@ -79,8 +84,9 @@ class ZodiacResult extends PureComponent {
                 <span id='zodiac-result-text'>{`You are a ${this.props.zodiac.charAt(0).toUpperCase()}${this.props.zodiac.substr(1)}!`}</span>
                 <img id='zodiac-result-icon'
                      className='spin'
-                     src={`/img/${this.props.zodiac.toLowerCase()}.png`} alt={this.props.zodiac}
-                     onAnimationEnd={this.handleAnimationEnd} />
+                     src={zodiacimg[this.props.zodiac.toLowerCase()]} alt={this.props.zodiac}
+                     onAnimationEnd={this.handleAnimationEnd}
+                     onClick={this.handleClick}/>
                 <span id='zodiac-result-about'>See the calculation method <a href='about'>here</a></span>
             </div>
         )
@@ -154,6 +160,7 @@ class ZodiacControl extends Component {
             <div id='zodiac-control-canvas'>
                 <div id='zodiac-control-inputs'>
                     <span>Your date of birth: </span>
+                    <br/>
                     <DateInput name='year' placeholder='Y' value={this.state.date.year} handleChange={this.handleDateChange} />
                     <DateInput name='month' placeholder='M' value={this.state.date.month} handleChange={this.handleDateChange} />
                     <DateInput name='day' placeholder='D' value={this.state.date.day} handleChange={this.handleDateChange} />

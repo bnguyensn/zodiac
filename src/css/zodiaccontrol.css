@@ -56,9 +56,15 @@
 
 /** ********** RESULTS ********** **/
 
+#zodiac-result {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
 #zodiac-result > span {
     display: block;
-
+    width: 100%;
     text-align: center;
 }
 

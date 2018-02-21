@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Main from './pages/Main';
+import Main from './components/Main';
 import './css/index.css';
 
 ReactDOM.render(
@@ -14,9 +14,9 @@ ReactDOM.render(
 
 // Hot Module Replacement
 if (module.hot) {
-    module.hot.accept('./pages/Main', () => {
+    module.hot.accept('./components/Main', () => {
         console.log('Accepting the updated module.');
-        const Next = require('./pages/Main');
+        const Next = require('./components/Main');
         ReactDOM.render(<Next />, document.getElementById('root'));
     });
 }

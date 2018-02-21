@@ -10,7 +10,7 @@ class Main extends Component {
     render() {
         return (
             <div id='main-canvas'>
-                <h1 id='title'>Which Chinese Zodiac Animal Are You?</h1>
+                <h1 id='title'>What's Your Chinese Zodiac Animal?</h1>
                 <ZodiacControl />
             </div>
         )

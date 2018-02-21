@@ -62,7 +62,7 @@ module.exports = () => {
                 {
                     test: /\.(png|jpe?g|gif)$/,
                     use: {
-                        loader: 'url-loader',
+                        loader: 'url-loader',  // url-loader has automatic file-loader fallback
                         options: {
                             limit: urlLoaderSizeLimit,
                             // [chunkhash] does not seem to work when loading large files. Reasons = unknown
