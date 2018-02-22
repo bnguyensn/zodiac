@@ -9,21 +9,13 @@ body {
     margin: 0;
 
     font: 24px 'Open Sans', sans-serif;
+
+    background-image: url('../img/textured_paper.png');
 }
 
 a {
     color: #03A9F4; /* Light Blue 500 */
     text-decoration: none;
-}
-
-h1 {
-    font-size: 1.25em;
-}
-
-#root-canvas {
-    min-height: 100vh;
-
-    background-image: url('../img/textured_paper.png');
 }
 
 /* ********** HELPERS ********** */
@@ -65,22 +57,19 @@ h1 {
 /* ********** RESPONSIVE WEB DESIGN ********** */
 
 #root {
-    /* Nothing will go below 280px wide */
     min-width: 280px;
 }
 
 /* Resize texts when window is resized */
-@media only screen and (max-width: 1920px) and (min-width: 1281px) {
+@media only screen and (max-width: 960px) and (min-width: 641px) {
     body {
-        font-size: 1.25vw;  /* Formula = body font size e.g. 24px / max-width e.g. 768px */
+        font-size: 2.5vw;  /* Formula = body font size e.g. 24px / max-width e.g. 960px */
     }
 }
 
 /* Texts won't go smaller than 16px */
-@media only screen and (max-width: 1280px) {
+@media only screen and (max-width: 640px) {
     body {
         font-size: 16px;  /* Formula = min font size e.g. 16px / % above e.g. 3.125% */
     }
 }
-
-/* 688px is when our title starts to wrap to 2 lines */

@@ -19,10 +19,6 @@ class DateInput extends PureComponent {
         this.handleFocus = this.handleFocus.bind(this);
     }
 
-    componentDidUpdate(prevProps, prevState, prevContext) {
-        console.log('DateInput did update!');
-    }
-
     handleAnimationEnd(e) {
         e.target.classList.remove(e.animationName);
     }
@@ -33,11 +29,15 @@ class DateInput extends PureComponent {
 
     render() {
         return (
-            <input className='date-control' id={this.props.name} type='tel'
-                   name={this.props.name} value={this.props.value} placeholder={this.props.placeholder}
-                   onChange={this.props.handleChange}
-                   onAnimationEnd={this.handleAnimationEnd}
-                   onFocus={this.handleFocus} />
+            <label>
+                <input className='date-control' id={this.props.name} type='tel'
+                       name={this.props.name} maxLength={this.props.size}
+                       value={this.props.value} placeholder={this.props.placeholder}
+                       onChange={this.props.handleChange}
+                       onAnimationEnd={this.handleAnimationEnd}
+                       onFocus={this.handleFocus} />
+                <span className='date-control-desc'>{this.props.name}</span>
+            </label>
         )
     }
 }
@@ -99,6 +99,7 @@ class ZodiacControl extends Component {
         this.flashInput = this.flashInput.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
         this.updateResults = this.updateResults.bind(this);
+        this.autoMoveFocus = this.autoMoveFocus.bind(this);
 
         this.state = {
             date: {
@@ -108,6 +109,10 @@ class ZodiacControl extends Component {
             },
             zodiac: ''
         }
+    }
+
+    componentDidMount() {
+        document.getElementById('year').focus();
     }
 
     flashInput(target, colour) {
@@ -131,6 +136,9 @@ class ZodiacControl extends Component {
                 this.setState({
                     date: date_shallow_clone
                 }, this.updateResults(date_shallow_clone));
+
+                // Move the focus to the next input if the maximum length has been reached
+                this.autoMoveFocus(target, value);
             } else {
                 this.flashInput(target, 'flash-red');
             }
@@ -155,17 +163,22 @@ class ZodiacControl extends Component {
         }
     }
 
+    autoMoveFocus(original_input, input_value) {
+        if (input_value.length === Number(original_input.getAttribute('maxlength'))) {
+            original_input.parentNode.nextElementSibling.firstElementChild.focus();
+        }
+    }
+
     render() {
         return (
             <div id='zodiac-control-canvas'>
                 <div id='zodiac-control-inputs'>
                     <h1 id='title'>What's Your Chinese Zodiac Animal?</h1>
-                    <br/>
                     <span>Your date of birth: </span>
                     <br/>
-                    <DateInput name='year' placeholder='Y' value={this.state.date.year} handleChange={this.handleDateChange} />
-                    <DateInput name='month' placeholder='M' value={this.state.date.month} handleChange={this.handleDateChange} />
-                    <DateInput name='day' placeholder='D' value={this.state.date.day} handleChange={this.handleDateChange} />
+                    <DateInput name='year' size={4} placeholder='Y' value={this.state.date.year} handleChange={this.handleDateChange} />
+                    <DateInput name='month' size={2} placeholder='M' value={this.state.date.month} handleChange={this.handleDateChange} />
+                    <DateInput name='day' size={2} placeholder='D' value={this.state.date.day} handleChange={this.handleDateChange} />
                 </div>
                 <ZodiacResult zodiac={this.state.zodiac} />
             </div>

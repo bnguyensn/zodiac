@@ -15,6 +15,8 @@
     font-size: 2em;
 
     text-align: center;
+
+    text-shadow: 2px 2px 2px #757575;
 }
 
 /** ********** INPUTS ********** **/
@@ -23,30 +25,36 @@
     text-align: center;
 }
 
-#zodiac-control-inputs input {
-    font: inherit;
-
-    text-align: center;
+#zodiac-control-inputs label {
+    display: inline-flex;
+    justify-content: center;
+    margin: 10px 0 10px 0;
+    flex-wrap: wrap;
 }
 
-.date-control {
-    margin: 0.5em;
+#zodiac-control-inputs input {
+    font: inherit;
+    text-align: center;
 }
 
 .date-control#year {
     width: 4em;
 }
 
-.date-control#month {
+.date-control#month, .date-control#day {
     width: 2em;
 }
 
-.date-control#day {
-    width: 2em;
+.date-control-desc {
+    margin-top: 5px;
+    width: 100%;
+    font-size: .75em;
 }
+
+/* Input animation */
 
 .date-control.flash-red {
-    animation: .25s flash-red;
+    animation: .1s flash-red;
 }
 
 @keyframes flash-red {
@@ -82,6 +90,8 @@
     width: 5em;
     height: 5em;
 }
+
+/* Result icon animation */
 
 #zodiac-result-icon.spin {
     animation: 1s cubic-bezier(0, .95, .5, .95) spin;

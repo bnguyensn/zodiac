@@ -3,11 +3,20 @@
     justify-content: center;
     flex-wrap: wrap;
 
-    max-width: 1920px;
-
     padding: 10px;
 }
 
-#main-canvas > div {
+#main-canvas > header, section {
+    max-width: 960px;
     width: 100%;
+}
+
+/** ********** HEADER ********** **/
+
+#header-canvas {
+    text-align: right;
+}
+
+.nav-link {
+    margin: 0 10px 0 10px;
 }

@@ -3,10 +3,6 @@
 import React, {Component} from 'react';
 import '../css/main.css';
 
-class Header extends Component {
-
-}
-
 function NavLink(props) {
     function navigate(e) {
         e.preventDefault();
@@ -15,9 +11,25 @@ function NavLink(props) {
     }
 
     return (
-        <a className='lnk' href={props.link} onClick={navigate}>
+        <a className='nav-link' href={props.link} onClick={navigate}>
             {props.content}
         </a>
+    )
+}
+
+function Header(props) {
+    return (
+        <header id='header-canvas'>
+            {props.children}
+        </header>
+    )
+}
+
+function Content(props) {
+    return (
+        <section id='content-canvas'>
+            {props.children}
+        </section>
     )
 }
 
@@ -62,9 +74,9 @@ class Main extends Component {
     render() {
         return (
             <div id='main-canvas'>
-                <NavLink link='/' content='HOME' navigate={this.navigate}/>
-                <NavLink link='/about' content='ABOUT' navigate={this.navigate}/>
-                {this.state.cur_pg}
+                <Content>
+                    {this.state.cur_pg}
+                </Content>
             </div>
         )
     }
