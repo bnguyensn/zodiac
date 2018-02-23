@@ -1,6 +1,8 @@
 'use strict';
 
 import React, {Component} from 'react';
+import ZodiacControl from './ZodiacControl';
+import About from './About';
 import '../css/main.css';
 
 function NavLink(props) {
@@ -74,9 +76,8 @@ class Main extends Component {
     render() {
         return (
             <div id='main-canvas'>
-                <Content>
-                    {this.state.cur_pg}
-                </Content>
+                <ZodiacControl />
+                <About />
             </div>
         )
     }

@@ -6,7 +6,7 @@
     padding: 10px;
 }
 
-#main-canvas > header, section {
+#main-canvas > * {
     max-width: 960px;
     width: 100%;
 }

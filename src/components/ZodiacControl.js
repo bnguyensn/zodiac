@@ -87,7 +87,6 @@ class ZodiacResult extends PureComponent {
                      src={zodiacimg[this.props.zodiac.toLowerCase()]} alt={this.props.zodiac}
                      onAnimationEnd={this.handleAnimationEnd}
                      onClick={this.handleClick}/>
-                <span id='zodiac-result-about'>See the calculation method <a href='about'>here</a></span>
             </div>
         )
     }
