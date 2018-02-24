@@ -172,7 +172,7 @@ class ZodiacControl extends Component {
         return (
             <div id='zodiac-control-canvas'>
                 <div id='zodiac-control-inputs'>
-                    <h1 id='title'>What's Your Chinese Zodiac Animal?</h1>
+                    <h1 id='zodiac-title'>What's Your Chinese Zodiac Animal?</h1>
                     <span>Your date of birth: </span>
                     <br/>
                     <DateInput name='year' size={4} placeholder='Y' value={this.state.date.year} handleChange={this.handleDateChange} />

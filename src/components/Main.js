@@ -55,7 +55,7 @@ class Main extends Component {
             if (e.state) {
                 this.navigate(e.state.url);
             }
-        }
+        };
 
         // First load navigation
         this.navigate(window.location.pathname);
