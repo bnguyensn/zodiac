@@ -12,7 +12,6 @@ class Expandable extends Component {
 
         this.state = {
             to_expand: true,
-            animating: false,
             visibility: 'hidden-vis'
         }
     }
@@ -20,7 +19,6 @@ class Expandable extends Component {
     handleExpandAnimEnd(e) {
         this.setState((prevState, props) => {
             return {
-                animating: false,
                 visibility: prevState.to_expand ? 'hidden-vis' : prevState.visibility
             }
         })
@@ -30,7 +28,6 @@ class Expandable extends Component {
         this.setState((prevState, props) => {
             return {
                 to_expand: !prevState.to_expand,
-                animating: true,
                 visibility: prevState.to_expand ? 'shown-vis' : prevState.visibility
             }
         });
@@ -59,16 +56,18 @@ class About extends Component {
     render() {
         return (
             <div id='about-canvas'>
-                <Expandable btnName='Calculation Method'>
-                    <section>
+                <Expandable btnName='ABOUT'>
+                    <section id='about-methodology'>
                         <h2>Methodology</h2>
                         <ol>
-                            <li>For a given date, identify the Chinese New Year Day of that year</li>
-                            <li>If the date</li>
+                            <li>Calculate the Chinese New Year day for a given year using phases of the Moon</li>
+                            <li>If the given date of birth falls after the Chinese New Year day, the zodiac is that year's zodiac, otherwise it's prior year's zodiac</li>
                         </ol>
+                        <br/>
+                        Currently supports UTC years 1 - 9999.
                     </section>
                     <section>
-                        <h2>Credits</h2>
+                        <h2>Acknowledgements</h2>
                         Formulas to calculate phases of the Moon come from <a href='https://en.wikipedia.org/wiki/Jean_Meeus' target='_blank'>Jean Meeus</a>' <a href='http://www.willbell.com/math/mc1.HTM' target='_blank'>Astronomical Algorithms</a>.
                         <br/><br/>
                         Chinese New Year calculations are derived from <a href='http://www.math.nus.edu.sg/aslaksen/' target='_blank'>Helmer Aslaksen</a>'s <a href='http://www.math.nus.edu.sg/aslaksen/calendar/chinese.shtml' target='_blank'>The Mathematics of the Chinese Calendar</a>.

@@ -86,6 +86,8 @@ h1#zodiac-title {
 }
 
 #zodiac-result-icon {
+    margin: 1em;
+
     /* Icon max res = 120x120 */
     width: 5em;
     height: 5em;

@@ -23,6 +23,11 @@ html {
     height: 0;
 }
 
+.expandable > section {
+    margin: 0.5em 0 0.5em 0;
+    padding: 0.5em 0 0.5em 0;
+}
+
 /** BUTTONS **/
 
 .expandable-btn {
@@ -63,7 +68,7 @@ html {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 1em 0 1em 0;
+    margin: 0.25em 0 0.5em 0;
 }
 
 #about-canvas h2:before {
@@ -81,5 +86,6 @@ html {
 /** LISTS **/
 
 #about-canvas ol {
-    padding: 0;
+    margin: 0;
+    padding: 0 1em 0 1em;
 }
