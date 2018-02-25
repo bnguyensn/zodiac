@@ -1,3 +1,85 @@
 #about-canvas {
-    text-align: center
+    text-align: center;
+}
+
+/** EXPANDABLE **/
+
+html {
+    overflow: scroll;
+}
+
+.expandable {
+    transform: scale(1, 0);
+    transform-origin: top center;
+
+    transition: transform 0.25s ease-out;
+}
+
+.expandable.expand {
+    transform: scale(1, 1);
+}
+
+.expandable.hidden-vis {
+    height: 0;
+}
+
+/** BUTTONS **/
+
+.expandable-btn {
+    border: none;
+    border-radius: 5px;
+    padding: 0.5em 1em 0.5em 1em;
+
+    box-shadow: 0 2px 2px #616161;
+
+    background-color: #03A9F4;
+
+    font: inherit;
+    color: #fafafa;
+
+    cursor: pointer;
+
+    transition: box-shadow 0.2s;
+}
+
+.expandable-btn:hover {
+    box-shadow: 0 3px 3px #616161;
+    background-color: #29B6F6;
+
+}
+
+.expandable-btn:active {
+    box-shadow: 0 1px 1px #616161;
+    background-color: #039BE5;
+}
+
+.expandable-btn::-moz-focus-inner {
+    border: none
+}
+
+/** PARAGRAPHS **/
+
+#about-canvas h2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1em 0 1em 0;
+}
+
+#about-canvas h2:before {
+    content: "❖";
+    margin-right: 1em;
+    font-size: 50%;
+}
+
+#about-canvas h2:after {
+    content: "❖";
+    margin-left: 1em;
+    font-size: 50%;
+}
+
+/** LISTS **/
+
+#about-canvas ol {
+    padding: 0;
 }

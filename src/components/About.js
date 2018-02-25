@@ -1,18 +1,65 @@
 'use strict';
 
 import React, {Component} from 'react';
+import classnames from 'classnames';
 import '../css/about.css';
 
-class About extends Component {
+class Expandable extends Component {
     constructor(props) {
         super(props);
+        this.toggleExpandable = this.toggleExpandable.bind(this);
+        this.handleExpandAnimEnd = this.handleExpandAnimEnd.bind(this);
+
+        this.state = {
+            to_expand: true,
+            animating: false,
+            visibility: 'hidden-vis'
+        }
+    }
+
+    handleExpandAnimEnd(e) {
+        this.setState((prevState, props) => {
+            return {
+                animating: false,
+                visibility: prevState.to_expand ? 'hidden-vis' : prevState.visibility
+            }
+        })
+    }
+
+    toggleExpandable() {
+        this.setState((prevState, props) => {
+            return {
+                to_expand: !prevState.to_expand,
+                animating: true,
+                visibility: prevState.to_expand ? 'shown-vis' : prevState.visibility
+            }
+        });
     }
 
     render() {
+        const expandable_cls = classnames({
+            'expandable': true,
+            'expand': !this.state.to_expand,
+            [this.state.visibility]: true
+        });
+
+        return (
+            <section className='expandable-container'>
+                <button className='expandable-btn' type='button'
+                        onClick={this.toggleExpandable}>{this.props.btnName}</button>
+                <section className={expandable_cls} onTransitionEnd={this.handleExpandAnimEnd}>
+                    {this.props.children}
+                </section>
+            </section>
+        )
+    }
+}
+
+class About extends Component {
+    render() {
         return (
             <div id='about-canvas'>
-                <a href='#'>Show calculation method</a>
-                <section id='about-expandable'>
+                <Expandable btnName='Calculation Method'>
                     <section>
                         <h2>Methodology</h2>
                         <ol>
@@ -34,7 +81,7 @@ class About extends Component {
                         <h2>Technology</h2>
                         This website is powered by Facebook's <a href='https://reactjs.org/' target='_blank'>React</a>, with backend running on <a href='https://nodejs.org/en/' target='_blank'>Node.js</a> and <a href='https://expressjs.com/' target='_blank'>Express</a>.
                     </section>
-                </section>
+                </Expandable>
             </div>
         )
     }
