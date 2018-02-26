@@ -1,0 +1,11 @@
+/** ********** FOOTER ********** **/
+
+footer {
+    padding: 0.5em;
+
+    background-color: #212121;
+
+    font-size: 0.5em;
+    color: #fafafa;
+    text-align: center;
+}

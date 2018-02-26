@@ -1,24 +1,17 @@
 #main-canvas {
     display: flex;
     justify-content: center;
+    align-content: flex-start;
     flex-wrap: wrap;
 
-    padding: 10px;
+    min-height: 100vh;
+
+    padding: 0.5em;
 }
 
-#main-canvas > * {
+#main-canvas > div {
     margin-bottom: 1em;
 
     max-width: 960px;
     width: 100%;
-}
-
-/** ********** HEADER ********** **/
-
-#header-canvas {
-    text-align: right;
-}
-
-.nav-link {
-    margin: 0 10px 0 10px;
 }

@@ -3,11 +3,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Main from './components/Main';
+import Footer from './components/Footer';
 import './css/index.css';
 
 ReactDOM.render(
     <div id="root-canvas">
         <Main />
+        <Footer />
     </div>,
     document.getElementById('root')
 );

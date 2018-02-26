@@ -19,22 +19,6 @@ function NavLink(props) {
     )
 }
 
-function Header(props) {
-    return (
-        <header id='header-canvas'>
-            {props.children}
-        </header>
-    )
-}
-
-function Content(props) {
-    return (
-        <section id='content-canvas'>
-            {props.children}
-        </section>
-    )
-}
-
 class Main extends Component {
     constructor(props) {
         super(props);

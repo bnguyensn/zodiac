@@ -59,7 +59,6 @@ class ZodiacResult extends PureComponent {
     }
 
     componentDidUpdate(prevProps, prevState, prevContext) {
-        console.log('ZodiacResult did update!');
         const element = document.getElementById('zodiac-result-icon');
         if (element !== null) {
             addAnimationClass(document.getElementById('zodiac-result-icon'), 'spin');
