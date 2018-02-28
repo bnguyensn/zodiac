@@ -1,6 +1,6 @@
 'use strict';
 
-import * as moonphases from './moonphases';
+const moonphases = require('./moonphases');
 
 /* ********** CONSTANTS ********** */
 
