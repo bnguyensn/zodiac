@@ -7,11 +7,12 @@ const cny = require('./cny');
 
 /**
  * Check if the passed parameter is a valid UTC year
+ * Valid = an integer between 1 and 9999
  * @param n Anything
  * @return {Boolean} Return true if the passed parameter is a valid UTC year
  * */
 function validateYear(n) {
-    
+    return Number.isInteger(n) && n > 0 && n < 9999
 }
 
 /**
