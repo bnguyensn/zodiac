@@ -49,6 +49,8 @@ class ZodiacResult extends PureComponent {
     constructor(props) {
         super(props);
         this.handleAnimationEnd = this.handleAnimationEnd.bind(this);
+
+        this.vowels = ['a', 'e', 'i', 'o', 'u'];
     }
 
     componentDidMount() {
@@ -78,9 +80,12 @@ class ZodiacResult extends PureComponent {
             return null;
         }
 
+        const zodiac_prefix = this.vowels.includes(this.props.zodiac.charAt(0).toLowerCase()) ? 'an' : 'a';
+        const zodiac_formatted = `${this.props.zodiac.charAt(0).toUpperCase()}${this.props.zodiac.substr(1)}`;
+
         return (
             <div id='zodiac-result'>
-                <span id='zodiac-result-text'>{`You are a ${this.props.zodiac.charAt(0).toUpperCase()}${this.props.zodiac.substr(1)}!`}</span>
+                <span id='zodiac-result-text'>{`You are ${zodiac_prefix} ${zodiac_formatted}!`}</span>
                 <img id='zodiac-result-icon'
                      className='spin'
                      src={zodiacimg[this.props.zodiac.toLowerCase()]} alt={this.props.zodiac}
