@@ -32,7 +32,11 @@ function createCNYlist(start, stop = start, step = 1) {
         return {[start]: cny.getCNY(start)}
     } else if (stop < start) {
         // TODO:
-
+        let cnyRes = {};
+        for (let y = start; y >= stop; y += step) {
+            cnyRes[y] = cny.getCNY(y);
+        }
+        return cnyRes
     } else {
         // TODO:
 
