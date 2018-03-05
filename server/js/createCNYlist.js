@@ -51,3 +51,6 @@ function writeCNYlist(data) {
     })
 }
 
+module.exports = {
+    createCNylist: createCNYlist
+}
