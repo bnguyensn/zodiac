@@ -18,6 +18,7 @@ router.get('/', (req, res, next) => {
  * A router to handle requests wanting to obtain a .json file containing a list of Chinese New Year
  * The GET request should be in the form '/cnylist?from=xxxx&to=xxxx&step=x'
  * to and step should be optional
+ *
  * */
 router.get('/cnylist', (req, res, next) => {
     const req_from = req.query.from;
