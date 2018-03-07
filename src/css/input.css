@@ -1,0 +1,45 @@
+.input-label {
+    display: inline-flex;
+    justify-content: center;
+    margin: 10px 0 10px 0;
+    flex-wrap: wrap;
+}
+
+.input-control {
+    font: inherit;
+    text-align: center;
+}
+
+.input-control.ipw4 {
+    width: 4em;
+}
+
+.input-control.ipw2 {
+    width: 2em;
+}
+
+.input-control-desc {
+    margin-top: 5px;
+    width: 100%;
+    font-size: .75em;
+}
+
+/* Input animation */
+
+.input-control.flash-red {
+    animation: .1s flash-red;
+}
+
+@keyframes flash-red {
+    0% {
+        background-color: inherit;
+    }
+
+    50% {
+        background-color: #ffcdd2;  /* Red 100 */
+    }
+
+    100% {
+        background-color: inherit;
+    }
+}

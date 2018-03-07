@@ -2,6 +2,7 @@
 
 import React, {Component} from 'react';
 import classnames from 'classnames';
+import Input from './Input';
 import '../css/about.css';
 
 class Expandable extends Component {
@@ -65,6 +66,9 @@ class About extends Component {
                         </ol>
                         <br/>
                         Currently supports UTC years 1 - 9999.
+                        <br/><br/>
+                        You can request a JSON file containing a list of calculated Chinese New Year dates here:
+                        <br/>
                     </section>
                     <section>
                         <h2>Acknowledgements</h2>
